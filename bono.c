@@ -33,7 +33,8 @@ void print_cabecera()
     printf("\033[0m"); // Restaurar el color del texto a su valor predeterminado
 }
 
-void convertirDirecciones() {
+void convertirDirecciones()
+{
     int opcion, VA, BASE, BOUNDS, PA;
     bool en_kilobytes_va, en_kilobytes_pa, en_kilobytes_base, en_kilobytes_bounds;
 
@@ -42,11 +43,15 @@ void convertirDirecciones() {
     pid_t pid;
     pid = fork();
 
-    if (pid == -1) {
+    if (pid == -1)
+    {
         perror("fork");
         exit(EXIT_FAILURE);
-    } else if (pid == 0) {
-        if (opcion == 1) {
+    }
+    else if (pid == 0)
+    {
+        if (opcion == 1)
+        {
             // Calcular PA
             printf("Ingrese el valor de la memoria virtual (VA): ");
             scanf("%d", &VA);
@@ -54,7 +59,8 @@ void convertirDirecciones() {
             char va_en_kb[3];
             scanf("%s", va_en_kb);
             en_kilobytes_va = (va_en_kb[0] == 's' || va_en_kb[0] == 'S');
-            if (en_kilobytes_va) {
+            if (en_kilobytes_va)
+            {
                 VA *= 1024;
             }
             printf("Ingrese el valor de BASE: ");
@@ -63,7 +69,8 @@ void convertirDirecciones() {
             char base_en_kb[3];
             scanf("%s", base_en_kb);
             en_kilobytes_base = (base_en_kb[0] == 's' || base_en_kb[0] == 'S');
-            if (en_kilobytes_base) {
+            if (en_kilobytes_base)
+            {
                 BASE *= 1024;
             }
             printf("Ingrese el valor de BOUNDS: ");
@@ -72,20 +79,26 @@ void convertirDirecciones() {
             char bounds_en_kb[3];
             scanf("%s", bounds_en_kb);
             en_kilobytes_bounds = (bounds_en_kb[0] == 's' || bounds_en_kb[0] == 'S');
-            if (en_kilobytes_bounds) {
+            if (en_kilobytes_bounds)
+            {
                 BOUNDS *= 1024;
             }
 
             // Validar la dirección
-            if (0 <= VA && VA <= BOUNDS) {
+            if (0 <= VA && VA <= BOUNDS)
+            {
                 // Calcular la dirección física
                 PA = VA + BASE;
                 printf("La dirección virtual es válida.\n");
                 printf("Dirección física (PA): %d bytes\n", PA);
-            } else {
+            }
+            else
+            {
                 printf("La dirección virtual está fuera de los límites (BOUNDS).\n");
             }
-        } else if (opcion == 2) {
+        }
+        else if (opcion == 2)
+        {
             // Calcular VA
             printf("Ingrese el valor de la memoria física (PA): ");
             scanf("%d", &PA);
@@ -93,7 +106,8 @@ void convertirDirecciones() {
             char pa_en_kb[3];
             scanf("%s", pa_en_kb);
             en_kilobytes_pa = (pa_en_kb[0] == 's' || pa_en_kb[0] == 'S');
-            if (en_kilobytes_pa) {
+            if (en_kilobytes_pa)
+            {
                 PA *= 1024;
             }
             printf("Ingrese el valor de BASE: ");
@@ -102,7 +116,8 @@ void convertirDirecciones() {
             char base_en_kb[3];
             scanf("%s", base_en_kb);
             en_kilobytes_base = (base_en_kb[0] == 's' || base_en_kb[0] == 'S');
-            if (en_kilobytes_base) {
+            if (en_kilobytes_base)
+            {
                 BASE *= 1024;
             }
             printf("Ingrese el valor de BOUNDS: ");
@@ -111,25 +126,45 @@ void convertirDirecciones() {
             char bounds_en_kb[3];
             scanf("%s", bounds_en_kb);
             en_kilobytes_bounds = (bounds_en_kb[0] == 's' || bounds_en_kb[0] == 'S');
-            if (en_kilobytes_bounds) {
+            if (en_kilobytes_bounds)
+            {
                 BOUNDS *= 1024;
             }
 
             // Validar la dirección
             VA = PA - BASE;
-            if (0 <= VA && VA <= BOUNDS) {
+            if (0 <= VA && VA <= BOUNDS)
+            {
                 // Calcular la dirección virtual
                 printf("La dirección física es válida.\n");
                 printf("Dirección virtual (VA): %d bytes\n", VA);
-            } else {
+            }
+            else
+            {
                 printf("La dirección física está fuera de los límites (BOUNDS).\n");
             }
-        } else {
+        }
+        else
+        {
             printf("Opción no válida. Por favor, seleccione 1 o 2.\n");
         }
         exit(EXIT_SUCCESS); // Salir del proceso hijo
-    } else {
+    }
+    else
+    {
         // Proceso padre
         wait(NULL); // Esperar a que el proceso hijo termine
     }
+}
+
+int main()
+{
+    printf("\033[?25l"); // Ocultar el cursor
+    system("clear");     // Limpiar la pantalla
+    animacion();         // Ejecutar la animación
+    printf("\033[?25h"); // Mostrar el cursor
+    print_cabecera();    // Mostrar el título y los autores
+    printf("\n\n");
+    convertirDirecciones(); // Llamar a la función principal
+    return 0;
 }
